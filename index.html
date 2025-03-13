@@ -8,7 +8,7 @@
       html {
         font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
           'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-        background-color: #f2f2f2;
+        background-color: #fff;
       }
 
       body {
@@ -49,13 +49,14 @@
         border: 2.5px solid #000;
         padding-top: 20px;
         text-align: center;
+        margin-bottom: 20px;
       }
 
       .guessSubmit {
         background-color: #000;
         border: none;
-        width: 60px;
-        height: 25px;
+        width: 80px;
+        height: 27px;
         border-radius: 5px;
         color: white;
         cursor: pointer;
@@ -131,15 +132,27 @@
 
           resetButton = document.createElement('button');
           resetButton.textContent = '다시 시작';
+          resetButton.style.cssText = `
+            background-color: #000;
+            border: none;
+            width: 80px;
+            height: 27px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            padding-top: 2px;
+            margin-left: 10px;
+        `;
           document.body.appendChild(resetButton);
           resetButton.addEventListener('click', resetGame);
+          console.log('🚀 resetButton 생성됨!');
         }
 
         function resetGame() {
           guessCount = 1;
 
           const resetP = document.querySelectorAll('.resultP p');
-          for (const resetP of resetP) {
+          for (const reset of resetP) {
             resetP.textContent = '';
           }
 
