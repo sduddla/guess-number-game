@@ -5,16 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>숫자 맞추기 게임</title>
     <style>
-      html {
-        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
-          'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-        background-color: #fff;
-      }
-
       body {
         width: 100%;
-        max-width: 800px;
-        min-width: 480px;
         margin: 0 auto;
         display: flex;
         flex-direction: column;
@@ -26,7 +18,7 @@
         width: 100vw;
         height: 70px;
         background-color: #000;
-        margin-bottom: 30px;
+        margin-bottom: 50px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -42,34 +34,37 @@
       }
 
       .form {
-        width: 700px;
+        width: 600px;
         height: 200px;
         border-radius: 5px;
         color: #000;
         border: 2.5px solid #000;
-        padding-top: 20px;
+        padding-top: 30px;
         text-align: center;
         margin-bottom: 20px;
       }
 
-      .guessSubmit {
+      .guessForm {
+        margin-bottom: 20px;
+      }
+
+      .submitForm {
         background-color: #000;
         border: none;
-        width: 80px;
+        width: 70px;
         height: 27px;
         border-radius: 5px;
         color: white;
         cursor: pointer;
-        padding-top: 2px;
         margin-left: 10px;
       }
 
-      .lastResult {
+      .result {
         color: white;
         padding: 3px;
       }
 
-      .guesses {
+      .guessGame {
         margin-top: 40px;
         display: block;
       }
@@ -77,56 +72,57 @@
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        let randomNumber = Math.floor(Math.random() * 50) + 1;
+        let randomNum = Math.floor(Math.random() * 50) + 1;
 
-        const guesses = document.querySelector('.guesses');
-        const lastResult = document.querySelector('.lastResult');
-        const lowOrhigh = document.querySelector('.lowOrhigh');
+        const guessGame = document.querySelector('.guessGame');
+        const result = document.querySelector('.result');
+        const numStatus = document.querySelector('.numStatus');
 
-        const guessSubmit = document.querySelector('.guessSubmit');
-        const guessField = document.querySelector('.guessField');
+        const submitForm = document.querySelector('.submitForm');
+        const guessForm = document.querySelector('.guessForm');
 
         let guessCount = 1;
         let resetButton;
-        guessField.focus(); // 페이지 로딩이 끝나면 텍스트 커서가 자동으로 <inpu>에 가도록 하는 코드
+        guessForm.focus(); // 페이지 로딩이 끝나면 텍스트 커서가 자동으로 <inpu>에 가도록 하는 코드
 
         // 몇 번이든 실행할 수 있는, 재사용 가능한 코드 블록
         // checkGuess() : 플레이어의 추측이 정답인 지 아닌 지 확인하고, 적합한 반응 하는 것이다.
-        function checkGuess() {
-          const userGuess = Number(guessField.value); // 변수의 값을 바꿀 계획은 없어 const로 선언
+        function checkNum() {
+          const userNum = Number(guessForm.value); // 변수의 값을 바꿀 계획은 없어 const로 선언
           if (guessCount === 1) {
-            guesses.textContent = '[이전 기록] ';
+            guessGame.textContent = '[이전 기록] ';
           }
-          guesses.textContent += userGuess + ' ';
+          guessGame.textContent += userNum + ' ';
 
-          if (userGuess == randomNumber) {
-            lastResult.textContent = '정답!';
-            lastResult.style.backgroundColor = 'green';
-            lowOrhigh.textContent = '';
-            setGameOver();
+          if (userNum == randomNum) {
+            result.textContent = '정답!';
+            result.style.backgroundColor = 'green';
+            numStatus.textContent = '';
+            gameOver();
           } else if (guessCount === 10) {
-            lastResult.textContent = '아쉽네요. 다시 도전하세요.';
-            lowOrhigh.textContent = '';
-            setGameOver();
+            result.textContent = '아쉽네요. 다시 도전하세요.';
+            numStatus.textContent = '';
+            gameOver();
           } else {
-            lastResult.textContent = '틀렸습니다.';
-            lastResult.style.backgroundColor = 'red';
-            if (userGuess < randomNumber) {
-              lowOrhigh.textContent = '더 큰 숫자를 입력해 보세요.';
-            } else if (userGuess > randomNumber) {
-              lowOrhigh.textContent = '더 작은 숫자를 입력해 보세요.';
+            result.textContent = '틀렸습니다.';
+            result.style.backgroundColor = 'red';
+            result.style.color = 'white';
+            if (userNum < randomNum) {
+              numStatus.textContent = '더 큰 숫자를 입력해 보세요.';
+            } else if (userNum > randomNum) {
+              numStatus.textContent = '더 작은 숫자를 입력해 보세요.';
             }
           }
 
           guessCount++;
-          guessField.value = '';
-          guessField.focus();
+          guessForm.value = '';
+          guessForm.focus();
         }
-        guessSubmit.addEventListener('click', checkGuess);
+        submitForm.addEventListener('click', checkNum);
 
-        function setGameOver() {
-          guessField.disabled = true;
-          guessSubmit.disabled = true;
+        function gameOver() {
+          guessForm.disabled = true;
+          submitForm.disabled = true;
           // 텍스트 입력 칸과 제출 버튼의 disabled 속성을 true로 설정해서 비활성화한다.
           // 비활성화를 하지 않으면 게임이 끝난 뒤에도 플레이어가 정답을 추가로 입력해서 게임을 망가뜨리게 된다.
 
@@ -135,37 +131,34 @@
           resetButton.style.cssText = `
             background-color: #000;
             border: none;
-            width: 80px;
+            width: 70px;
             height: 27px;
             border-radius: 5px;
             color: white;
             cursor: pointer;
-            padding-top: 2px;
-            margin-left: 10px;
+            text-align: center;
         `;
           document.body.appendChild(resetButton);
           resetButton.addEventListener('click', resetGame);
-          console.log('🚀 resetButton 생성됨!');
         }
 
         function resetGame() {
           guessCount = 1;
 
-          const resetP = document.querySelectorAll('.resultP p');
-          for (const reset of resetP) {
-            resetP.textContent = '';
+          const reset = document.querySelectorAll('.reset p');
+          for (const rp of reset) {
+            reset.textContent = '';
           }
 
           resetButton.parentNode.removeChild(resetButton);
           // HTML에서 초기화 버튼 제거
 
-          guessField.disabled = false;
-          guessSubmit.disabled = false;
-          guessField.value = '';
-          guessField.focus();
+          guessForm.disabled = false;
+          submitForm.disabled = false;
+          guessForm.value = '';
+          guessForm.focus();
 
-          lastResult.style.backgroundColor = '#fff';
-          randomNumber = Math.floor(Math.random() * 50) + 1;
+          randomNum = Math.floor(Math.random() * 50) + 1;
         }
       });
     </script>
@@ -185,24 +178,24 @@
     </div>
 
     <div class="form">
-      <label for="guessField">입력해주세요:</label>
+      <label for="guessForm">입력해주세요:</label>
       <!-- label : 인라인 요소 -->
       <input
         type="number"
         min="1"
         max="50"
         required
-        id="guessField"
-        class="guessField"
+        id="guessForm"
+        class="guessForm"
       />
-      <input type="submit" value="제출" class="guessSubmit" />
+      <input type="submit" value="제출" class="submitForm" />
       <!-- input : 인라인 요소 -->
 
       <!-- 게임 초기화할 때 사용 -->
-      <div class="resultP">
-        <p class="guesses"></p>
-        <p class="lastResult"></p>
-        <p class="lowOrhigh"></p>
+      <div class="reset">
+        <p class="guessGame"></p>
+        <p class="result"></p>
+        <p class="numStatus"></p>
       </div>
     </div>
   </body>
